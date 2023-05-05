@@ -1,6 +1,6 @@
-package com.r3.developers.csdetemplate.utxoexample.workflows
+package com.r3.developers.demo.tradeconf.workflows
 
-import com.r3.developers.csdetemplate.utxoexample.states.ChatState
+import com.r3.developers.demo.tradeconf.states.TradeConfState
 import net.corda.v5.application.flows.ClientRequestBody
 import net.corda.v5.application.flows.ClientStartableFlow
 import net.corda.v5.application.flows.CordaInject
@@ -33,21 +33,21 @@ class ListChatsFlow : ClientStartableFlow {
     lateinit var ledgerService: UtxoLedgerService
 
     @Suspendable
-    override fun call(requestBody: ClientRequestBody): String {
+    override fun call(requestBody: ClientRequestBody) : String {
 
         log.info("ListChatsFlow.call() called")
 
         // Queries the VNode's vault for unconsumed states and converts the result to a serializable DTO.
-        val states = ledgerService.findUnconsumedStatesByType(ChatState::class.java)
-        val results = states.map {
-            ChatStateResults(
-                it.state.contractState.id,
-                it.state.contractState.chatName,
-                it.state.contractState.messageFrom.toString(),
-                it.state.contractState.message) }
-
+        val states = ledgerService.findUnconsumedStatesByType(TradeConfState::class.java)
+        //val results = states.map {
+        //    ChatStateResults(
+        //        it.state.contractState.id,
+        //        it.state.contractState.ssi,
+        //        it.state.contractState.sharedBy.toString(),
+        //        it.state.contractState.status) }
+//
         // Uses the JsonMarshallingService's format() function to serialize the DTO to Json.
-        return jsonMarshallingService.format(results)
+        return "hi"
     }
 }
 

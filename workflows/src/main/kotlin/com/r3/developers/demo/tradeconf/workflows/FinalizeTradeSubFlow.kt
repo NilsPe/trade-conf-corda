@@ -1,6 +1,6 @@
-package com.r3.developers.csdetemplate.utxoexample.workflows
+package com.r3.developers.demo.tradeconf.workflows
 
-import com.r3.developers.csdetemplate.utxoexample.states.ChatState
+import com.r3.developers.demo.tradeconf.states.TradeConfState
 import net.corda.v5.application.flows.*
 import net.corda.v5.application.messaging.FlowMessaging
 import net.corda.v5.application.messaging.FlowSession
@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory
 // See Chat CorDapp Design section of the getting started docs for a description of this flow.
 
 // @InitiatingFlow declares the protocol which will be used to link the initiator to the responder.
-@InitiatingFlow(protocol = "finalize-chat-protocol")
-class FinalizeChatSubFlow(private val signedTransaction: UtxoSignedTransaction, private val otherMember: MemberX500Name): SubFlow<String> {
+@InitiatingFlow(protocol = "share-trade-protocol")
+class FinalizeTradeSubFlow(private val signedTransaction: UtxoSignedTransaction, private val otherMember: MemberX500Name): SubFlow<String> {
 
     private companion object {
         val log = LoggerFactory.getLogger(this::class.java.enclosingClass)
@@ -31,7 +31,7 @@ class FinalizeChatSubFlow(private val signedTransaction: UtxoSignedTransaction, 
     @Suspendable
     override fun call(): String {
 
-        log.info("FinalizeChatFlow.call() called")
+        log.info("FinalizeTradeSubFlow.call() called")
 
             // Initiates a session with the other Member.
             val session = flowMessaging.initiateFlow(otherMember)
@@ -57,11 +57,9 @@ class FinalizeChatSubFlow(private val signedTransaction: UtxoSignedTransaction, 
     }
 }
 
-// See Chat CorDapp Design section of the getting started docs for a description of this flow.
-
 //@InitiatingBy declares the protocol which will be used to link the initiator to the responder.
-@InitiatedBy(protocol = "finalize-chat-protocol")
-class FinalizeChatResponderFlow: ResponderFlow {
+@InitiatedBy(protocol = "share-trade-protocol")
+class FinalizeTradeResponderFlow: ResponderFlow {
 
     private companion object {
         val log = LoggerFactory.getLogger(this::class.java.enclosingClass)
@@ -74,7 +72,7 @@ class FinalizeChatResponderFlow: ResponderFlow {
     @Suspendable
     override fun call(session: FlowSession) {
 
-        log.info("FinalizeChatResponderFlow.call() called")
+        log.info("FinalizeTradeResponderFlow.call() called")
 
         try {
             // Calls receiveFinality() function which provides the responder to the finalise() function
@@ -83,13 +81,8 @@ class FinalizeChatResponderFlow: ResponderFlow {
             val finalizedSignedTransaction = ledgerService.receiveFinality(session) { ledgerTransaction ->
 
                 // Note, this exception will only be shown in the logs if Corda Logging is set to debug.
-                val state = ledgerTransaction.getOutputStates(ChatState::class.java).singleOrNull() ?:
+                val state = ledgerTransaction.getOutputStates(TradeConfState::class.java).singleOrNull() ?:
                     throw CordaRuntimeException("Failed verification - transaction did not have exactly one output ChatState.")
-
-                // Uses checkForBannedWords() and checkMessageFromMatchesCounterparty() functions
-                // to check whether to sign the transaction.
-                checkForBannedWords(state.message)
-                checkMessageFromMatchesCounterparty(state, session.counterparty)
 
                 log.info("Verified the transaction- ${ledgerTransaction.id}")
             }

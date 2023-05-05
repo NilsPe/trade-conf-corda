@@ -1,6 +1,6 @@
-package com.r3.developers.csdetemplate.utxoexample.workflows
+package com.r3.developers.demo.tradeconf.workflows
 
-import com.r3.developers.csdetemplate.utxoexample.states.ChatState
+import com.r3.developers.demo.tradeconf.states.TradeConfState
 import net.corda.v5.application.flows.ClientRequestBody
 import net.corda.v5.application.flows.ClientStartableFlow
 import net.corda.v5.application.flows.CordaInject
@@ -44,12 +44,14 @@ class GetChatFlow: ClientStartableFlow {
         // Note, this code brings all unconsumed states back, then filters them.
         // This is an inefficient way to perform this operation when there are a large number of chats.
         // Note, you will get this error if you input an id which has no corresponding ChatState (common error).
-        val states = ledgerService.findUnconsumedStatesByType(ChatState::class.java)
-        val state = states.singleOrNull {it.state.contractState.id == flowArgs.id}
+        val states = ledgerService.findUnconsumedStatesByType(TradeConfState::class.java)
+        //val state = states.singleOrNull {it.state.contractState.id == flowArgs.id}
             ?: throw CordaRuntimeException("Did not find an unique unconsumed ChatState with id ${flowArgs.id}")
 
         // Calls resolveMessagesFromBackchain() which retrieves the chat history from the backchain.
-        return jsonMarshallingService.format(resolveMessagesFromBackchain(state, flowArgs.numberOfRecords ))
+        return "hi";
+        //jsonMarshallingService.format(resolveMessagesFromBackchain(state, flowArgs.numberOfRecords ))
+
     }
 
     // resoveMessageFromBackchain() starts at the stateAndRef provided, which represents the unconsumed head of the
@@ -57,7 +59,7 @@ class GetChatFlow: ClientStartableFlow {
     // the numberOfRecords argument. For each transaction it adds the MessageAndSender representing the
     // message and who sent it to a list which is then returned.
     @Suspendable
-    private fun resolveMessagesFromBackchain(stateAndRef: StateAndRef<ChatState>, numberOfRecords: Int): List<MessageAndSender>{
+    private fun resolveMessagesFromBackchain(stateAndRef: StateAndRef<TradeConfState>, numberOfRecords: Int): List<MessageAndSender>{
 
         // Set up a MutableList to collect the MessageAndSender(s)
         val messages = mutableListOf<MessageAndSender>()
@@ -77,9 +79,9 @@ class GetChatFlow: ClientStartableFlow {
 
             // Get the output state from the transaction and use it to create a MessageAndSender Object which
             // is appended to the mutable list.
-            val output = transaction.getOutputStates(ChatState::class.java).singleOrNull()
+            val output = transaction.getOutputStates(TradeConfState::class.java).singleOrNull()
                 ?: throw CordaRuntimeException("Expecting one and only one ChatState output for transaction $transactionId.")
-            messages.add(MessageAndSender(output.messageFrom.toString(), output.message))
+            messages.add(MessageAndSender(output.sharedBy.toString(), output.status))
             // Decrement the number of records to fetch.
             recordsToFetch--
 
@@ -95,7 +97,7 @@ class GetChatFlow: ClientStartableFlow {
                 throw CordaRuntimeException("More than one input state found for transaction $transactionId.")
             } else {
                 @Suppress("UNCHECKED_CAST")
-                currentStateAndRef = inputStateAndRefs.single() as StateAndRef<ChatState>
+                currentStateAndRef = inputStateAndRefs.single() as StateAndRef<TradeConfState>
             }
         }
      // Convert to an immutable List.

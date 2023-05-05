@@ -1,4 +1,4 @@
-package com.r3.developers.csdetemplate.flowexample.workflows
+package com.r3.developers.demo.flowexample.workflows
 
 //import com.r3.developers.csdetemplate.flowexample.workflows.MyFirstFlow
 //import com.r3.developers.csdetemplate.flowexample.workflows.MyFirstFlowResponder
