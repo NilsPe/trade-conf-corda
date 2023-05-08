@@ -38,7 +38,7 @@ class TradeConfContract: Contract {
 
                 val input = transaction.inputContractStates.single() as TradeConfState
                 val output = transaction.outputContractStates.single() as TradeConfState
-                "When command is Update id must not change." using (input.id == output.id)
+                "When command is Update id must not change." using (input.tradeId == output.tradeId)
                 "When command is Update chatName must not change." using (input.details == output.details)
                 "When command is Update participants must not change." using (
                         input.participants.toSet().intersect(output.participants.toSet()).size == 2)

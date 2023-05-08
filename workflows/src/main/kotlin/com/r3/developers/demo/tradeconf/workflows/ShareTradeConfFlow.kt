@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
 
-class ShareTradeConfStartArgs(val counterpartyName: String, val id: String, val ssi: String)
+class ShareTradeConfStartArgs(val counterpartyName: String, val tradeId: String, val details: String)
 
 class ShareTradeConfFlow: ClientStartableFlow {
 
@@ -58,9 +58,9 @@ class ShareTradeConfFlow: ClientStartableFlow {
 
             // Create the ChatState from the input arguments and member information.
             val tradeConfState = TradeConfState(
-                id = flowArgs.id,
-                details = flowArgs.ssi,
-                sharedBy = myInfo.name,
+                tradeId = flowArgs.tradeId,
+                details = flowArgs.details,
+                lastUpdateBy = myInfo.name,
                 status = "SHARED",
                 participants = listOf(myInfo.ledgerKeys.first(), counterparty.ledgerKeys.first())
             )
