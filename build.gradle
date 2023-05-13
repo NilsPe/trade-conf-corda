@@ -17,7 +17,7 @@ allprojects {
 
     // Configure the CSDE
     csde {
-        cordaClusterURL = "https://localhost:8888"
+        cordaClusterURL = "https://localhost:32222" // 32222 is the local cluster, set to "https://localhost:8888" for CSDE combined worker
         networkConfigFile = "config/static-network-config.json"
         r3RootCertFile = "config/beta-ca-root.pem"
         corDappCpiName = "MyCorDapp"
