@@ -2,17 +2,17 @@ apiVersion: v1
 entries:
   corda:
   - apiVersion: v2
-    appVersion: 5.0.0.0-Hawk1.0.1-Nils
-    created: "2023-05-13T01:18:45.9407395+02:00"
+    appVersion: 5.0.0.0-Hawk1.0.1
+    created: "2023-05-13T02:07:05.9991026+02:00"
     dependencies:
     - name: corda-lib
       repository: file://../corda-lib
       version: 5.0.0-Hawk1.0.1
     description: A Helm chart for Corda
-    digest: e244b590c1751f74fefa0c93ad22e521c949027713e2210eb53389dd7a115e7c
+    digest: 9a277be02160bb26046535d92d0e7dab40a683f0c56f069aaabde585aeebe87b
     name: corda
     type: application
     urls:
-    - corda-5.0.0-Hawk1.0.1-Nils.tgz
-    version: 5.0.0-Hawk1.0.1-Nils
-generated: "2023-05-13T01:18:45.9214965+02:00"
+    - corda-5.0.0-Hawk1.0.1.tgz
+    version: 5.0.0-Hawk1.0.1
+generated: "2023-05-13T02:07:05.9969384+02:00"
